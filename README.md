@@ -1,4 +1,4 @@
-## VRPTW-Solver-Comparison-pyApp
+# Vehicle Routing Problem with Time Windows (VRPTW) Solver Comparison
 
 ## The Comparison results of different NP metahuristic algorithms for VRPTW
 
@@ -162,179 +162,202 @@ Algorithms - - No. of Routes - - Costs - - Gap(%) - - Runtime(seconds)
 
 ![3 HGS rc108](https://github.com/user-attachments/assets/afac9be9-37a1-4b4d-a7f8-5d346d653e2f) ![3 GLS rc108](https://github.com/user-attachments/assets/b8140b7f-30c2-4f65-9d55-24207754dd0f) ![3 ACO rc108](https://github.com/user-attachments/assets/3643d0e9-c3d4-418c-8ed7-efea8d94ede9) ![3 SA rc108](https://github.com/user-attachments/assets/3632158b-6131-4157-97bd-9cd4116bcecf)
 
-# VRPTW Solver Comparison
+## Project Overview
 
-This project is a comprehensive comparison of various algorithms for solving the **Vehicle Routing Problem with Time Windows (VRPTW)**. It implements and compares multiple heuristic and metaheuristic algorithms, including:
+This repository provides a comprehensive comparison and implementation of several heuristic and metaheuristic algorithms for solving the **Vehicle Routing Problem with Time Windows (VRPTW)**. Developed as part of a master's thesis, the project offers reproducible experiments, insightful analysis, and visualizations of solutions across different algorithms.
 
-- **Hybrid Genetic Search (HGS)**
-- **Guided Local Search (GLS)**
-- **Ant Colony Optimization (ACO)**
-- **Simulated Annealing (SA)**
+---
 
-The project was developed as part of a master's thesis and provides tools to evaluate and visualize the performance of these algorithms on benchmark datasets.
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Algorithms Implemented](#algorithms-implemented)
+- [How to Run](#how-to-run)
+- [Visualizations](#visualizations)
+- [Results & Comparison](#results--comparison)
+- [Screenshots](#screenshots)
+- [Keywords](#keywords)
+- [Contact](#contact)
+
+---
+
+## Project Overview
+
+The VRPTW is a classic combinatorial optimization problem that extends the Vehicle Routing Problem (VRP) by adding time windows for customer visits. This project benchmarks and compares several well-known algorithms on standard datasets (e.g., Solomon's instances) and visualizes their performance.
+
+**Algorithms Compared:**
+- Hybrid Genetic Search (HGS)
+- Guided Local Search (GLS)
+- Ant Colony Optimization (ACO)
+- Simulated Annealing (SA)
+
+---
+
+## Features
+
+- Modular implementation for each algorithm
+- Benchmarking against Best-Known Solutions (BKS)
+- Visual comparison of routes and costs
+- Reproducible experiments via fixed seeds (with options to randomize)
+- Interactive Jupyter notebook for experiment walkthroughs
+- Easily extensible for new algorithms or datasets
+
+---
+
+## Technologies Used
+
+- **Python 3.x**: Core programming language
+- **NumPy, pandas**: Data manipulation and analysis
+- **matplotlib**: Visualization of routes and performance
+- **OR-Tools**: Used in GLS for routing optimization
+- **pyVRP**: Framework for HGS implementation
+- **Jupyter Notebook**: Interactive analysis and visualization
 
 ---
 
 ## Project Structure
 
-### Key Files and Directories
-
-- **`main.py`**: The main script to run the project. It orchestrates the execution of all algorithms and generates results.
-- **`solver.ipynb`**: A Jupyter Notebook for running and visualizing the algorithms interactively.
-- **`aco/`**: Contains the implementation of Ant Colony Optimization.
-- **`gls/`**: Contains the implementation of Guided Local Search.
-- **`sa/`**: Contains the implementation of Simulated Annealing.
-- **`hgs/`**: Contains the implementation of Hybrid Genetic Search.
-- **`bks.py`**: Reads and processes the Best Known Solution (BKS) for comparison.
-- **`plot.py`**: Contains utilities for visualizing solutions and routes.
-- **`data/`**: Contains benchmark datasets in Solomon format (`.txt`) and their corresponding Best Known Solutions (`.sol`).
-- **`requirements.txt`**: Lists the Python dependencies required to run the project.
-
----
-
-## Algorithms Overview
-
-### 1. **Hybrid Genetic Search (HGS)**
-HGS is a metaheuristic algorithm inspired by genetic algorithms. It uses a population of solutions that evolve over time through selection, crossover, and mutation. The implementation leverages the **`pyvrp`** library.
-
-- **Key Features**:
-  - Supports Solomon benchmark instances.
-  - Configurable stopping criteria: `MaxRuntime` or `MaxIterations`.
-
-- **Code Example**:
-  ```python
-  from pyvrp import Model, read
-  from pyvrp.stop import MaxRuntime
-
-  def solve_with_hgs(input_path, runtime):
-      INSTANCE = read(input_path, instance_format="solomon", round_func="trunc1")
-      model = Model.from_data(INSTANCE)
-      result = model.solve(stop=MaxRuntime(runtime), seed=0)
-
-      print("HGS cost:", result.cost() / 10)
-      print("HGS solution:")
-      print(result.best)
-
-      routes = [route.visits() for route in result.best.get_routes()]
-      return routes, round(result.cost() / 10, 1)
-  ```
-
-### 2. **Guided Local Search (GLS)**
-GLS enhances local search by penalizing frequently used solution components, encouraging exploration of less-visited areas of the solution space.
-
-- **Key Features**:
-  - Uses OR-Tools for routing and optimization.
-  - Configurable time limits for solving.
-
-- **Code Example**:
-  ```python
-  from gls.base_solver import Solver
-  from gls.instance_loader import load_instance
-
-  def solve_with_gls(input_path, runtime):
-      data = load_instance(input_path, time_precision_scaler=10)
-      solver = Solver(data, time_precision_scaler=10)
-      solver.create_model()
-      solver.solve_model({"time_limit": runtime})
-
-      routes = solver.get_solution()
-      cost = solver.get_solution_travel_time()
-      return routes, round(cost, 1)
-  ```
-
-### 3. **Ant Colony Optimization (ACO)**
-ACO is inspired by the behavior of ants searching for food. It uses pheromone trails to guide the search for optimal solutions.
-
-- **Key Features**:
-  - Iterative improvement based on pheromone updates.
-  - Suitable for combinatorial optimization problems.
-
-### 4. **Simulated Annealing (SA)**
-SA is a probabilistic technique that explores the solution space by accepting worse solutions with a decreasing probability over time.
-
-- **Key Features**:
-  - Configurable initial temperature and cooling schedule.
-  - Simple and effective for VRPTW.
+```
+.
+├── main.py                   # Main script to run all algorithms and generate results
+├── solver.ipynb              # Jupyter Notebook for interactive exploration
+├── aco/                      # Implementation of Ant Colony Optimization
+├── gls/                      # Implementation of Guided Local Search
+├── sa/                       # Simulated Annealing code
+├── hgs/                      # Hybrid Genetic Search code
+├── bks.py                    # Processes Best-Known Solutions (BKS)
+├── plot.py                   # Visualization utilities
+├── data/                     # Benchmark datasets (Solomon .txt and .sol)
+├── requirements.txt          # Python dependencies
+├── README.md                 # Project documentation
+```
 
 ---
 
-## How to Run the Project
+## Algorithms Implemented
 
-### 1. **Setup the Environment**
-1. Create a virtual environment:
-   ```sh
-   python -m venv .venv
-   ```
-2. Activate the virtual environment:
-   - On Linux/Mac:
-     ```sh
-     source .venv/bin/activate
-     ```
-   - On Windows:
-     ```sh
-     .venv\Scripts\activate
-     ```
-3. Install the required dependencies:
-   ```sh
-   pip install -r requirements.txt
-   ```
+### 1. Hybrid Genetic Search (HGS)
+A metaheuristic that evolves a population of solutions using selection, crossover, and mutation. Implementation is based on the pyVRP library and supports customizable stopping criteria.
 
-### 2. **Run the Main Script**
-Execute the main script to run all algorithms and generate results:
+**Example Usage:**
+```python
+from pyvrp import Model, read
+from pyvrp.stop import MaxRuntime
+
+def solve_with_hgs(input_path, runtime):
+    INSTANCE = read(input_path, instance_format="solomon", round_func="trunc1")
+    model = Model.from_data(INSTANCE)
+    result = model.solve(stop=MaxRuntime(runtime), seed=0)  # Can randomize 'seed'
+    return result
+```
+
+### 2. Guided Local Search (GLS)
+Enhances local search by penalizing overused solution components, implemented using OR-Tools, and allows for time-limited optimization.
+
+**Example Usage:**
+```python
+from gls.base_solver import Solver
+from gls.instance_loader import load_instance
+
+def solve_with_gls(input_path, runtime):
+    data = load_instance(input_path)
+    solver = Solver(data)
+    solver.create_model()
+    solver.solve_model({"time_limit": runtime})
+    return solver.get_solution()
+```
+
+### 3. Ant Colony Optimization (ACO)
+A population-based metaheuristic that simulates ant foraging behavior using pheromone trails to discover optimal routes.
+
+### 4. Simulated Annealing (SA)
+A probabilistic algorithm that explores the solution space by occasionally accepting worse solutions, allowing escape from local minima.
+
+---
+
+## How to Run
+
+### 1. Environment Setup
+```sh
+python -m venv .venv
+# Activate the virtual environment:
+# Linux/Mac:
+source .venv/bin/activate
+# Windows:
+.venv\Scripts\activate
+
+pip install -r requirements.txt
+```
+
+### 2. Running the Algorithms
+To run all algorithms and generate comparative results:
 ```sh
 python main.py
 ```
 
-### 3. **Run the Jupyter Notebook**
-For interactive exploration and visualization:
+### 3. Interactive Exploration
+For a step-by-step interactive analysis:
 ```sh
 jupyter notebook solver.ipynb
 ```
 
 ---
 
-## Visualizing Results
+## Visualizations
 
-The project generates visualizations of the routes for each algorithm. These are plotted using `matplotlib` and can be customized in the `plot.py` file.
+- Visualizations of the generated routes and algorithm performance are created using `matplotlib`. You can customize these plots in `plot.py`.
+- Results are saved and/or displayed as images for direct comparison.
 
 ---
 
-## Addressing the HGS Question
+## Results & Comparison
 
-### Problem: Same Solution for Different Stopping Criteria
-The issue arises because the **`pyvrp`** library uses a fixed random seed (`seed=0`) in the `solve` function. This ensures reproducibility but results in the same solution for the same instance, regardless of the stopping criteria.
+The following table summarizes the results of each algorithm on the `rc108.txt` dataset:
 
-### Solution:
-To introduce variability, modify the `seed` parameter to a random value or remove it entirely:
-```python
-from random import randint
+| Algorithm | Route Cost | No. of Routes | Gap (%) | Runtime (s) |
+|-----------|------------|---------------|---------|-------------|
+| BKS       | 1114.2     | 11            | 0       | -           |
+| HGS       | 1114.2     | 11            | 0.0     | 300.14      |
+| GLS       | 1266.9     | 10            | 13.7    | 300.05      |
+| ACO       | 1321.8     | 11            | 18.63   | 877.20      |
+| SA        | 1237.6     | 12            | 11.08   | 416.81      |
 
-result = model.solve(stop=MaxRuntime(runtime), seed=randint(0, 1000))
-```
+> See the detailed solution routes and costs for each algorithm in the section below.
 
-Alternatively, you can experiment with different stopping criteria:
-- **MaxRuntime**: Limits the runtime of the algorithm.
-- **MaxIterations**: Limits the number of iterations.
+---
 
-### Example Output:
-For the provided instance, the HGS algorithm produces the following solution:
-```
-Hybrid Genetic Search (HGS) Route Cost: 1114.2
+## Screenshots
 
-HGS solution:
-Route #1: 12 14 47 17 16 15 13 9 11 10
-Route #2: 82 99 52 86 87 59 97 75 58 74
-...
-```
+*All images are retained from the original README and illustrate the route solutions for each algorithm.*
+
+---
+
+## Keywords
+
+- Vehicle Routing Problem (VRP)
+- Time Windows
+- Metaheuristics
+- Genetic Algorithm
+- Ant Colony Optimization
+- Simulated Annealing
+- Guided Local Search
+- Solomon Dataset
+- Routing Optimization
+- Visualization
+- Benchmarking
 
 ---
 
 ## Contact
 
-For further questions or issues, feel free to reach out.
+For questions, feedback, or collaboration:
 
-Best regards,  
+**Arnob**  
+Email: arnob_t78@yahoo.com
 
-Arnob
+---
 
-arnob_t78@yahoo.com
+*Thank you for exploring this project!*
