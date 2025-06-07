@@ -355,7 +355,7 @@ The following table summarizes the results of each algorithm on the `rc108.txt` 
 
 For questions, feedback, or collaboration:
 
-**Arnob**  
+**Arnob Mahmud**  
 Email: arnob_t78@yahoo.com
 
 ---
