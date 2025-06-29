@@ -1,10 +1,12 @@
 # Vehicle Routing Problem with Time Windows (VRPTW) Solver Comparison
 
+---
+
 ## The Comparison results of different NP metahuristic algorithms for VRPTW
 
 Running Algorithms on dataset: rc108.txt
 
-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - -
+---
 
 Best-Known Solution (BKS) Route Cost: 1114.2
 
@@ -32,7 +34,7 @@ Route #10: 90
 
 Route #11: 92 95 67 62 50 63 85 84 56 91 80
 
-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - -
+---
 
 Hybrid Genetic Search (HGS) Route Cost: 1114.2
 
@@ -60,7 +62,7 @@ Route #10: 90
 
 Route #11: 69 98 88 53 78 73 79 60 55 70 68 
 
-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - -
+---
 
 Guided Local Search (GLS) Route Cost: 1266.9
 
@@ -86,7 +88,7 @@ Route #9: 83 52 57 86 87 59 97 75 58 74
 
 Route #10: 64 19 48 18 63 85 84 56 66
 
-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - -
+---
 
 Ant Colony Optimization (ACO) Route Cost: 1321.8459204561746
 
@@ -114,7 +116,7 @@ Route #10: 59 58 87 97 75 77
 
 Route #11: 92 95 84 50 67
 
-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - -
+---
 
 Simulated Annealing (SA) Route Cost: 1237.620141359753
 
@@ -144,7 +146,7 @@ Route #11: 81 93 71 72 41 54
 
 Route #12: 95 33 32 30 28 26 27 29 31 80
 
-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - -
+---
 
 Algorithms - - No. of Routes - - Costs - - Gap(%) - - Runtime(seconds)
 
@@ -158,19 +160,21 @@ Algorithms - - No. of Routes - - Costs - - Gap(%) - - Runtime(seconds)
 
   SA - - -- - - - 12 - - - - - - - - - - 1237.6 - - 11.08 - - - 416.80780506134033
 
-- - - - - - - - - - - - - - - - - - - - - - - -- - - - - - - - - - -
+---
 
 ![3 HGS rc108](https://github.com/user-attachments/assets/afac9be9-37a1-4b4d-a7f8-5d346d653e2f) ![3 GLS rc108](https://github.com/user-attachments/assets/b8140b7f-30c2-4f65-9d55-24207754dd0f) ![3 ACO rc108](https://github.com/user-attachments/assets/3643d0e9-c3d4-418c-8ed7-efea8d94ede9) ![3 SA rc108](https://github.com/user-attachments/assets/3632158b-6131-4157-97bd-9cd4116bcecf)
+---
 
-## Project Overview
+## Project Summary
 
-This repository provides a comprehensive comparison and implementation of several heuristic and metaheuristic algorithms for solving the **Vehicle Routing Problem with Time Windows (VRPTW)**. Developed as part of a master's thesis, the project offers reproducible experiments, insightful analysis, and visualizations of solutions across different algorithms.
+This repository provides a comprehensive comparison and implementation of several heuristic and metaheuristic algorithms for solving the **Vehicle Routing Problem with Time Windows (VRPTW)**. Developed as part of an advanced study project, it showcases reproducible computational experiments, detailed analysis, and visualizations of solution quality for different algorithms. The target audience includes researchers, students, and practitioners interested in operations research, optimization, and applied machine learning.
 
 ---
 
 ## Table of Contents
 
-- [Project Overview](#project-overview)
+- [Project Summary](#project-summary)
+- [Project Details](#project-details)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Project Structure](#project-structure)
@@ -184,9 +188,9 @@ This repository provides a comprehensive comparison and implementation of severa
 
 ---
 
-## Project Overview
+## Project Details
 
-The VRPTW is a classic combinatorial optimization problem that extends the Vehicle Routing Problem (VRP) by adding time windows for customer visits. This project benchmarks and compares several well-known algorithms on standard datasets (e.g., Solomon's instances) and visualizes their performance.
+The Vehicle Routing Problem with Time Windows (VRPTW) is a classic combinatorial optimization problem that extends the basic Vehicle Routing Problem (VRP) by adding constraints on service time windows for each customer. The challenge is to determine optimal routes for a fleet of vehicles to service a set of customers within their specified time windows, minimizing total travel cost. This project benchmarks and compares several well-known metaheuristic algorithms on standard datasets (e.g., Solomon's instances) and visualizes their performance.
 
 **Algorithms Compared:**
 - Hybrid Genetic Search (HGS)
@@ -225,7 +229,12 @@ The VRPTW is a classic combinatorial optimization problem that extends the Vehic
 ├── main.py                   # Main script to run all algorithms and generate results
 ├── solver.ipynb              # Jupyter Notebook for interactive exploration
 ├── aco/                      # Implementation of Ant Colony Optimization
+│   ├── vrptw_base.py         # Node and graph structures for ACO
+│   ├── basic_aco.py          # Core ACO logic and route extraction
+│   ├── ant.py                # Ant agent behaviors and movement
 ├── gls/                      # Implementation of Guided Local Search
+│   ├── base_solver.py        # GLS algorithm and solver logic
+│   ├── instance_loader.py    # Data loader for GLS
 ├── sa/                       # Simulated Annealing code
 ├── hgs/                      # Hybrid Genetic Search code
 ├── bks.py                    # Processes Best-Known Solutions (BKS)
@@ -254,6 +263,8 @@ def solve_with_hgs(input_path, runtime):
     return result
 ```
 
+---
+
 ### 2. Guided Local Search (GLS)
 Enhances local search by penalizing overused solution components, implemented using OR-Tools, and allows for time-limited optimization.
 
@@ -270,8 +281,33 @@ def solve_with_gls(input_path, runtime):
     return solver.get_solution()
 ```
 
+---
+
 ### 3. Ant Colony Optimization (ACO)
 A population-based metaheuristic that simulates ant foraging behavior using pheromone trails to discover optimal routes.
+
+**Key Classes:**
+- `Node` (in `aco/vrptw_base.py`): Represents each location (customer or depot), including time windows and demand.
+- `Ant` (in `aco/ant.py`): Each ant constructs a route, considering vehicle load, time windows, and updates its path.
+- `BasicACO` (in `aco/basic_aco.py`): Core logic for iteratively building solutions and updating pheromones.
+
+**Example Code Excerpt:**
+```python
+# Example: Extracting routes from the best path (aco/basic_aco.py)
+def get_best_route(self):
+    routes = []
+    route = []
+    for node in self.best_path:
+        if node != 0:
+            route.append(node)
+        else:
+            if route:
+                routes.append(route)
+                route = []
+    return routes
+```
+
+---
 
 ### 4. Simulated Annealing (SA)
 A probabilistic algorithm that explores the solution space by occasionally accepting worse solutions, allowing escape from local minima.
@@ -281,6 +317,7 @@ A probabilistic algorithm that explores the solution space by occasionally accep
 ## How to Run
 
 ### 1. Environment Setup
+
 ```sh
 python -m venv .venv
 # Activate the virtual environment:
@@ -292,14 +329,22 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+---
+
 ### 2. Running the Algorithms
+
 To run all algorithms and generate comparative results:
+
 ```sh
 python main.py
 ```
 
+---
+
 ### 3. Interactive Exploration
+
 For a step-by-step interactive analysis:
+
 ```sh
 jupyter notebook solver.ipynb
 ```
@@ -333,6 +378,8 @@ The following table summarizes the results of each algorithm on the `rc108.txt` 
 
 *All images are retained from the original README and illustrate the route solutions for each algorithm.*
 
+*(See README for full image list)*
+
 ---
 
 ## Keywords
@@ -348,6 +395,12 @@ The following table summarizes the results of each algorithm on the `rc108.txt` 
 - Routing Optimization
 - Visualization
 - Benchmarking
+
+---
+
+## Conclusion
+
+This project serves as a hands-on, extensible, and educational platform for benchmarking and understanding metaheuristic algorithms applied to the VRPTW. You are encouraged to explore, modify, and extend the codebase for learning, research, or practical use cases.
 
 ---
 
