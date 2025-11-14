@@ -1,4 +1,4 @@
-# Vehicle Routing Problem with Time Windows (VRPTW) Solver Comparison
+# Vehicle Routing Problem with Time Windows (VRPTW) Solver Comparison - Python (strategies for solving NP-hard optimization problems using multi Meta-heuristic ​= ​Heuristic ​+ ​Randomization algorithms)
 
 ---
 
