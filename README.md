@@ -167,7 +167,7 @@ Algorithms - - No. of Routes - - Costs - - Gap(%) - - Runtime(seconds)
 
 ## Project Summary
 
-This repository provides a comprehensive comparison and implementation of several heuristic and metaheuristic algorithms for solving the **Vehicle Routing Problem with Time Windows (VRPTW)**. Developed as part of an advanced study project, it showcases reproducible computational experiments, detailed analysis, and visualizations of solution quality for different algorithms. The target audience includes researchers, students, and practitioners interested in operations research, optimization, and applied machine learning.
+A comprehensive comparison and implementation of several heuristic and metaheuristic algorithms for solving the **Vehicle Routing Problem with Time Windows (VRPTW)**. Developed as part of an advanced study project, it showcases reproducible computational experiments, detailed analysis, and visualizations of solution quality for different algorithms. The target audience includes researchers, students, and practitioners interested in operations research, optimization, and applied machine learning.
 
 ---
 
